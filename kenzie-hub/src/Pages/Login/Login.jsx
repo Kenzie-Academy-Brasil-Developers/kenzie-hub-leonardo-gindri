@@ -1,9 +1,12 @@
 import { ContainerLogin } from "./Style";
-import logo from "../../../Images/logo.png";
+import Logo from "../../../Images/Logo.png";
 import * as yup from "yup";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate } from "react-router-dom";
+import Api from "../../Services/Api/Api";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
 
 const schema = yup.object({
   email: yup
@@ -27,24 +30,67 @@ export default function LoginPage() {
 
   const navigate = useNavigate();
 
+  const toastSuccess = () =>
+    toast.success("Acesso permitido.", {
+      position: "top-center",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+    });
+
+  const toastFailed = () =>
+    toast.error("Acesso negado.", {
+      position: "top-center",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+    });
+
   function registerPage(event) {
-    event.preventDefault();
     navigate("/register");
+  }
+
+  function onSubmitFunction(data) {
+    Api.post("/sessions", data)
+      .then(
+        (response) => {
+          console.log(response.data);
+          localStorage.setItem("@TOKEN", response.data.token);
+          localStorage.setItem("@USERID", response.data.user.id);
+          toastSuccess();
+        },
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 2000)
+      )
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   return (
     <ContainerLogin>
-      <img src={logo} alt="" />
+      <img src={Logo} alt="" />
       <div className="div">
         <h1 className="teste">Login</h1>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit(onSubmitFunction)}>
           <span className="spanInput">Email</span>
           <input {...register("email")} placeholder={"Digite seu email"} />
-          <span> {errors.email?.message} </span>
+          <span className="spanErro"> {errors.email?.message} </span>
           <span className="spanInput">Senha</span>
-          <input {...register("password")} placeholder={"Digite sua senha"} />
-          <span> {errors.password?.message} </span>
-          <button>Entrar</button>
+          <input
+            {...register("password")}
+            type="password"
+            placeholder={"Digite sua senha"}
+          />
+          <span className="spanErro"> {errors.password?.message} </span>
+          <button type="submit">Entrar</button>
         </form>
         <div className="registerBox">
           <span className="spanRegister">Ainda não possui uma conta?</span>

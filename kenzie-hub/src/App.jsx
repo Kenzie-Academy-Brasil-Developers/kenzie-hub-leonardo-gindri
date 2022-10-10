@@ -1,20 +1,15 @@
-import React from "react"
-import LoginPage from "./Pages/Login/Login"
-import Cadastro from "./Pages/Cadastro/Cadastro"
-import Dashboard from "./Pages/Dashboard/Dashboard"
-import Api from "./Components/Api/Api"
-import RoutesAll from "./Routes"
+import React from "react";
+import RoutesAll from "./Routes";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
 
 function App() {
-
-
-
-
   return (
     <div className="App">
-      <RoutesAll/>
+      <RoutesAll />
+      <ToastContainer />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

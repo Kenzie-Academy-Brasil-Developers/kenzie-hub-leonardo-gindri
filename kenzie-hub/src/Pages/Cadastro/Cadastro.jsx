@@ -1,11 +1,12 @@
-import logo from "../../../Images/logo.png";
+import Logo from "../../../Images/Logo.png";
 import { ContainerRegister } from "./Style";
-import Api from "../../Components/Api/Api";
-import { useEffect } from "react";
+import Api from "../../Services/Api/Api";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
 
 const schema = yup.object({
   email: yup
@@ -15,6 +16,10 @@ const schema = yup.object({
   password: yup
     .string()
     .min(6, "A senha deve conter no minimo 6 caracteres")
+    .matches(
+      /^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])/,
+      "A senha deve conter caracteres especiais e numeros."
+    )
     .required("Campo obrigatório"),
   confirmPassword: yup
     .string()
@@ -33,6 +38,29 @@ export default function Cadastro() {
   } = useForm({
     resolver: yupResolver(schema),
   });
+
+  const toastSuccess = () =>
+    toast.success("Conta criada com sucesso.", {
+      position: "top-center",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+    });
+
+  const toastFailed = () =>
+    toast.error("Ops, algo deu errado!", {
+      position: "top-center",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+    });
+
   const navigate = useNavigate();
 
   function loginpage(event) {
@@ -42,21 +70,21 @@ export default function Cadastro() {
   }
 
   function onSubmitFunction(data) {
-    console.log(data);
-    // Api.post("/users", {
-    //   email: "johndoe@email.com",
-    //   password: "123456",
-    //   name: "John Doe",
-    //   bio: "Lorem ipsum dolor emet",
-    //   contact: "linkedin/in/johndoe",
-    //   course_module: "Segundo Módulo (Frontend avançado)",
-    // });
+    Api.post("/users", data)
+      .then(
+        (response) => console.log(response.data),
+        toastSuccess(),
+        setTimeout(() => {
+          navigate("/");
+        }, 2000)
+      )
+      .catch((err) => console.log(err));
   }
 
   return (
     <ContainerRegister>
       <div className="header">
-        <img src={logo} alt="" />
+        <img src={Logo} alt="" />
         <button onClick={(event) => loginpage(event)} className="btnVoltar">
           Voltar
         </button>
@@ -71,48 +99,58 @@ export default function Cadastro() {
             {...register("name")}
             placeholder={"Digite aqui seu nome"}
           />
-          <span> {errors.name?.message} </span>
+          <span className="spanErro"> {errors.name?.message} </span>
           <p>Email</p>
           <input
             type={"text"}
             {...register("email")}
             placeholder={"Digite aqui seu email"}
           />
-          <span> {errors.email?.message} </span>
+          <span className="spanErro"> {errors.email?.message} </span>
           <p>Senha</p>
           <input
             type={"password"}
             {...register("password")}
             placeholder={"Digite aqui sua senha"}
           />
-          <span> {errors.password?.message} </span>
+          <span className="spanErro"> {errors.password?.message} </span>
           <p>Confirmar Senha</p>
           <input
             type={"password"}
             {...register("confirmPassword")}
             placeholder={"Confirme sua senha"}
           />
-          <span> {errors.confirmPassword?.message} </span>
+          <span className="spanErro"> {errors.confirmPassword?.message} </span>
           <p>Bio</p>
           <input
             type={"text"}
             {...register("bio")}
             placeholder={"Digite aqui sua bio"}
           />
-          <span> {errors.bio?.message} </span>
+          <span className="spanErro"> {errors.bio?.message} </span>
           <p>Contato</p>
           <input
             type={"text"}
             {...register("contact")}
             placeholder={"Digite aqui seu contato"}
           />
-          <span> {errors.contact?.message} </span>
+          <span className="spanErro"> {errors.contact?.message} </span>
           <p>Selecionar Módulo</p>
           <select name="" {...register("course_module")} id="">
-            <option value="Primerio Módulo">Primeiro Módulo</option>
-            <option value="Segundo Módulo">Segundo Módulo</option>
+            <option value="Primeiro módulo (Introdução ao Frontend)">
+              Primeiro módulo (Introdução ao Frontend)
+            </option>
+            <option value="Segundo módulo (Frontend Avançado)">
+              Segundo módulo (Frontend Avançado)
+            </option>
+            <option value="Terceiro módulo (Introdução ao Backend)">
+              Terceiro módulo (Introdução ao Backend)
+            </option>
+            <option value="Quarto módulo (Backend Avançado)">
+              Quarto módulo (Backend Avançado)
+            </option>
           </select>
-          <span> {errors.course_module?.message} </span>
+          <span className="spanErro"> {errors.course_module?.message} </span>
           <button type="submit" className="btnCadastrar">
             Cadastrar
           </button>
