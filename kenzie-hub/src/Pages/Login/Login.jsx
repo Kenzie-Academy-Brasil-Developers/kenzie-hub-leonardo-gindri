@@ -1,11 +1,11 @@
 import { ContainerLogin } from "./Style";
 import Logo from "../../../Images/Logo.png";
 import * as yup from "yup";
-import { set, useForm } from "react-hook-form";
+import { AuthContext } from "../../Contexts/AuthContext";
+import { useContext } from "react";
+import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useNavigate } from "react-router-dom";
-import Api from "../../Services/Api/Api";
-import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.min.css";
 
 const schema = yup.object({
@@ -20,6 +20,8 @@ const schema = yup.object({
 });
 
 export default function LoginPage() {
+  const { onSubmitFunction, user } = useContext(AuthContext);
+
   const {
     register,
     handleSubmit,
@@ -27,52 +29,6 @@ export default function LoginPage() {
   } = useForm({
     resolver: yupResolver(schema),
   });
-
-  const navigate = useNavigate();
-
-  const toastSuccess = () =>
-    toast.success("Acesso permitido.", {
-      position: "top-center",
-      autoClose: 1000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: false,
-      draggable: true,
-      progress: undefined,
-    });
-
-  const toastFailed = () =>
-    toast.error("Acesso negado.", {
-      position: "top-center",
-      autoClose: 1000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: false,
-      draggable: true,
-      progress: undefined,
-    });
-
-  function registerPage(event) {
-    navigate("/register");
-  }
-
-  function onSubmitFunction(data) {
-    Api.post("/sessions", data)
-      .then(
-        (response) => {
-          console.log(response.data);
-          localStorage.setItem("@TOKEN", response.data.token);
-          localStorage.setItem("@USERID", response.data.user.id);
-          toastSuccess();
-        },
-        setTimeout(() => {
-          navigate("/dashboard");
-        }, 2000)
-      )
-      .catch((err) => {
-        console.log(err);
-      });
-  }
 
   return (
     <ContainerLogin>
@@ -94,7 +50,10 @@ export default function LoginPage() {
         </form>
         <div className="registerBox">
           <span className="spanRegister">Ainda não possui uma conta?</span>
-          <button onClick={(event) => registerPage(event)}>Cadastre-se</button>
+
+          <Link className="button link" to={"/register"}>
+            Cadastre-se
+          </Link>
         </div>
       </div>
     </ContainerLogin>
