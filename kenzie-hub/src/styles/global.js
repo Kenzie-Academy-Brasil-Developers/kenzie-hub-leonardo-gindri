@@ -22,7 +22,7 @@ export const GlobalStyle = createGlobalStyle`
     max-height: 100vh;
     }
 
-    button, .link{
+    button, .link, .btnVoltar{
     cursor: pointer;
     border: none;
     background-color: transparent;
