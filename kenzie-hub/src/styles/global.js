@@ -12,6 +12,8 @@ export const GlobalStyle = createGlobalStyle`
     padding: 0;
     box-sizing: border-box;
     font-family: 'Inter', sans-serif;
+    list-style: none;
+    text-decoration: none;
     }
  
     html, body{
@@ -20,7 +22,7 @@ export const GlobalStyle = createGlobalStyle`
     max-height: 100vh;
     }
 
-    button{
+    button, .link{
     cursor: pointer;
     border: none;
     background-color: transparent;

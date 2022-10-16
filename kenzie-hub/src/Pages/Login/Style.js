@@ -69,7 +69,8 @@ export const ContainerLogin = styled.div`
     align-items: center;
     gap: 1rem;
     width: 100%;
-    button {
+    button,
+    .link {
       height: 38px;
       padding: 0px 22px;
       width: 100%;
