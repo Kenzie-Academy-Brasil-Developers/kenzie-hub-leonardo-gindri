@@ -27,20 +27,20 @@ export default function AuthProvider({ children }) {
 
   function onSubmitCadastro(data) {
     Api.post("/users", data)
-      .then(
-        (response) => console.log(response.data),
-        useToast("success", "Conta cadastrada com sucesso.")
-        // setTimeout(() => {
-        //   navigate("/");
-        // }, 2000)
-      )
-      .catch(
-        (err) => console.log(err),
-        useToast(
-          "error",
-          "Verifique se todos os campos foram preenchidos corretamente."
-        )
-      );
+      .then((response) => {
+        console.log(response.data),
+          useToast("success", "Conta cadastrada com sucesso."),
+          setTimeout(() => {
+            navigate("/");
+          }, 2000);
+      })
+      .catch((err) => {
+        console.log(err),
+          useToast(
+            "error",
+            "Verifique se todos os campos foram preenchidos corretamente."
+          );
+      });
   }
 
   function onSubmitFunction(data) {
