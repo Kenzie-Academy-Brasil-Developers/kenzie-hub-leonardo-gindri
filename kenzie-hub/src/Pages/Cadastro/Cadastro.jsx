@@ -5,7 +5,7 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 
 const schema = yup.object({
@@ -41,17 +41,6 @@ export default function Cadastro() {
 
   const toastSuccess = () =>
     toast.success("Conta criada com sucesso.", {
-      position: "top-center",
-      autoClose: 1000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: false,
-      draggable: true,
-      progress: undefined,
-    });
-
-  const toastFailed = () =>
-    toast.error("Ops, algo deu errado!", {
       position: "top-center",
       autoClose: 1000,
       hideProgressBar: false,
