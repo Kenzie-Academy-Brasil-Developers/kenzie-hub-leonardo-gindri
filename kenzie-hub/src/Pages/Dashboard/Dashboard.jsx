@@ -15,7 +15,7 @@ export default function Dashboard() {
       {user ? (
         <DashbaordPage>
           <header>
-            <img src={Logo} alt="" />
+            <img src={Logo} id={""} alt="" />
             <button className="btnLogout" onClick={(event) => logout(event)}>
               Sair
             </button>
