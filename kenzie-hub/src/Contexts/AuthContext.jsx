@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import Api from "../Services/Api/Api";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import useToast from "../hooks/useToast";
 import "react-toastify/dist/ReactToastify.min.css";
 
@@ -14,9 +14,32 @@ export default function AuthProvider({ children }) {
     function Profile() {
       Api.get("/profile", {
         headers: { Authorization: `Bearer ${localStorage.getItem("@TOKEN")}` },
-      }).then((response) => {});
+      }).then((response) => {
+        setUser(response.data);
+        navigate("/dashboard", { replace: true });
+      });
     }
+    Profile();
   }, []);
+
+  function onSubmitFunction(data) {
+    Api.post("/sessions", data)
+
+      .then((response) => {
+        localStorage.setItem("@TOKEN", response.data.token);
+        localStorage.setItem("@USERID", response.data.user.id);
+        setUser(response.data);
+        useToast("success", "Login efetuado com sucesso.");
+        navigate("/dashboard", { replace: true });
+      })
+      .catch((err) => {
+        if (
+          err.response.data.message === "Incorrect email / password combination"
+        ) {
+          useToast("error", "Verifique se email e senha estão corretos.");
+        }
+      });
+  }
 
   function logout(event) {
     event.preventDefault();
@@ -31,38 +54,12 @@ export default function AuthProvider({ children }) {
         console.log(response.data),
           useToast("success", "Conta cadastrada com sucesso."),
           setTimeout(() => {
-            navigate("/");
+            navigate("/", { replace: true });
           }, 2000);
       })
       .catch((err) => {
-        console.log(err),
-          useToast(
-            "error",
-            "Verifique se todos os campos foram preenchidos corretamente."
-          );
-      });
-  }
-
-  function onSubmitFunction(data) {
-    Api.post("/sessions", data)
-
-      .then((response) => {
-        console.log(response.data);
-        localStorage.setItem("@TOKEN", response.data.token);
-        localStorage.setItem("@USERID", response.data.user.id);
-        const { user: userResponse } = response.data;
-        setUser(userResponse);
-        useToast("success", "Login efetuado com sucesso.");
-
-        setTimeout(() => {
-          navigate("/dashboard", { replace: true });
-        }, 2000);
-      })
-      .catch((err) => {
-        if (
-          err.response.data.message === "Incorrect email / password combination"
-        ) {
-          useToast("error", "Verifique se email e senha estão corretos.");
+        if (err.response.data.message === "Email already exists") {
+          useToast("error", "Esse email já existe.");
         }
       });
   }
