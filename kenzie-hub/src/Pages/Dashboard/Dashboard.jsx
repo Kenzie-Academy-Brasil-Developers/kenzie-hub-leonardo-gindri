@@ -1,51 +1,47 @@
 import { DashbaordPage } from "./style";
+import { useContext } from "react";
+import { AuthContext } from "../../Contexts/AuthContext";
 import Logo from "../../../Images/Logo.png";
-import { useEffect, useState } from "react";
-import Api from "../../Services/Api/Api";
-import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
+import Tecnologias from "../../Components/Tecnologias/Tecnologias";
+import NovaTecnologia from "../../Components/NovaTecnologia/CadastrarNovaTec";
 
 export default function Dashboard() {
-  const [user, setUser] = useState([]);
-
-  useEffect(() => {
-    Api.get("/profile", {
-      headers: { Authorization: `Bearer ${localStorage.getItem("@TOKEN")}` },
-    }).then((response) => {
-      setUser({
-        name: response.data.name,
-        course_module: response.data.course_module,
-      });
-    });
-  }, []);
-
-  const navigate = useNavigate();
-
-  function logout(event) {
-    event.preventDefault();
-    localStorage.clear();
-    navigate("/");
-  }
+  const { user, logout } = useContext(AuthContext);
+  console.log(user);
 
   return (
-    <DashbaordPage>
-      <header>
-        <img src={Logo} alt="" />
-        <button onClick={(event) => logout(event)}>Sair</button>
-      </header>
-      <div className="divsorias"></div>
-      <main>
-        <div>
-          <h1>Olá, {user.name}</h1>
-          <span>{user.course_module}</span>
-        </div>
-      </main>
-      <div className="divsorias"></div>
-      <div className="notification">
-        <h2>Que pena! Estamos em desenvolvimento :(</h2>
-        <p>
-          Nossa aplicação está em desenvolvimento, em breve teremos novidades
-        </p>
-      </div>
-    </DashbaordPage>
+    <>
+      {user ? (
+        <DashbaordPage>
+          <header>
+            <img src={Logo} id={""} alt="" />
+            <button className="btnLogout" onClick={(event) => logout(event)}>
+              Sair
+            </button>
+          </header>
+          <div className="divsorias"></div>
+          <main>
+            <div className="infoUser">
+              <h1>Olá, {user.name}</h1>
+              <span>{user.course_module}</span>
+            </div>
+          </main>
+          <div className="divsorias"></div>
+          <div className="container">
+            <div className="headerContainer">
+              <h2>Tecnologias</h2>
+              <button className="addTecBtn">+</button>
+            </div>
+            <div className="containerTecnologias">
+              <Tecnologias />
+            </div>
+          </div>
+          <NovaTecnologia />
+        </DashbaordPage>
+      ) : (
+        <Navigate to={"/"} replace />
+      )}
+    </>
   );
 }

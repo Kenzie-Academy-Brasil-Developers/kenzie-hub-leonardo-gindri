@@ -1,36 +1,21 @@
 import Logo from "../../../Images/Logo.png";
+import { AuthContext } from "../../Contexts/AuthContext";
 import { ContainerRegister } from "./Style";
-import Api from "../../Services/Api/Api";
-import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+<<<<<<< HEAD
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+=======
+>>>>>>> 29e9ba3533b07a4be85dfc2d220dc4a42cb92652
 import "react-toastify/dist/ReactToastify.min.css";
-
-const schema = yup.object({
-  email: yup
-    .string()
-    .email("Deve ser um e-mail válido")
-    .required("Campo obrigatório"),
-  password: yup
-    .string()
-    .min(6, "A senha deve conter no minimo 6 caracteres")
-    .matches(
-      /^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])/,
-      "A senha deve conter caracteres especiais e numeros."
-    )
-    .required("Campo obrigatório"),
-  confirmPassword: yup
-    .string()
-    .oneOf([yup.ref("password")], "A senha deve ser igual"),
-  name: yup.string().required("Campo obrigatório"),
-  bio: yup.string().required("Campo obrigatório."),
-  contact: yup.string().required("Campo obrigatorio"),
-  course_module: yup.string().required("Campo obritório"),
-});
+import { useContext } from "react";
+import schema from "../../Validations/validationCadastro";
+import { Link } from "react-router-dom";
 
 export default function Cadastro() {
+  const { onSubmitCadastro } = useContext(AuthContext);
+
   const {
     register,
     handleSubmit,
@@ -39,6 +24,7 @@ export default function Cadastro() {
     resolver: yupResolver(schema),
   });
 
+<<<<<<< HEAD
   const toastSuccess = () =>
     toast.success("Conta criada com sucesso.", {
       position: "top-center",
@@ -70,18 +56,20 @@ export default function Cadastro() {
       .catch((err) => console.log(err));
   }
 
+=======
+>>>>>>> 29e9ba3533b07a4be85dfc2d220dc4a42cb92652
   return (
     <ContainerRegister>
       <div className="header">
         <img src={Logo} alt="" />
-        <button onClick={(event) => loginpage(event)} className="btnVoltar">
+        <Link className="btnVoltar" to={"/"}>
           Voltar
-        </button>
+        </Link>
       </div>
       <div className="divForm">
         <h2>Cria sua conta</h2>
         <span>Rapido e grátis, vamos nessa</span>
-        <form onSubmit={handleSubmit(onSubmitFunction)}>
+        <form onSubmit={handleSubmit(onSubmitCadastro)}>
           <p>Nome</p>
           <input
             type={"text"}
