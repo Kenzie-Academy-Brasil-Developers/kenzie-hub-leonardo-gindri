@@ -3,11 +3,8 @@ import { AuthContext } from "../../Contexts/AuthContext";
 import { ContainerRegister } from "./Style";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-<<<<<<< HEAD
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-=======
->>>>>>> 29e9ba3533b07a4be85dfc2d220dc4a42cb92652
 import "react-toastify/dist/ReactToastify.min.css";
 import { useContext } from "react";
 import schema from "../../Validations/validationCadastro";
@@ -24,7 +21,6 @@ export default function Cadastro() {
     resolver: yupResolver(schema),
   });
 
-<<<<<<< HEAD
   const toastSuccess = () =>
     toast.success("Conta criada com sucesso.", {
       position: "top-center",
@@ -56,8 +52,6 @@ export default function Cadastro() {
       .catch((err) => console.log(err));
   }
 
-=======
->>>>>>> 29e9ba3533b07a4be85dfc2d220dc4a42cb92652
   return (
     <ContainerRegister>
       <div className="header">
