@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import Api from "../Services/Api/Api";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import useToast from "../hooks/useToast";
 import "react-toastify/dist/ReactToastify.min.css";
 
@@ -9,6 +9,7 @@ export const AuthContext = createContext({});
 export default function AuthProvider({ children }) {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
+  const [gatilho, setGatilho] = useState(false);
 
   useEffect(() => {
     function Profile() {
@@ -20,7 +21,7 @@ export default function AuthProvider({ children }) {
       });
     }
     Profile();
-  }, []);
+  }, [gatilho]);
 
   function onSubmitFunction(data) {
     Api.post("/sessions", data)
@@ -28,7 +29,7 @@ export default function AuthProvider({ children }) {
       .then((response) => {
         localStorage.setItem("@TOKEN", response.data.token);
         localStorage.setItem("@USERID", response.data.user.id);
-        setUser(response.data);
+        setUser(response.data.user);
         useToast("success", "Login efetuado com sucesso.");
         navigate("/dashboard", { replace: true });
       })
@@ -51,11 +52,9 @@ export default function AuthProvider({ children }) {
   function onSubmitCadastro(data) {
     Api.post("/users", data)
       .then((response) => {
-        console.log(response.data),
-          useToast("success", "Conta cadastrada com sucesso."),
-          setTimeout(() => {
-            navigate("/", { replace: true });
-          }, 2000);
+        useToast("success", "Conta cadastrada com sucesso."),
+          navigate("/", { replace: true });
+        setGatilho(!gatilho);
       })
       .catch((err) => {
         if (err.response.data.message === "Email already exists") {
