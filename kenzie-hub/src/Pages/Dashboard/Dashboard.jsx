@@ -5,10 +5,11 @@ import Logo from "../../../Images/Logo.png";
 import { Navigate } from "react-router-dom";
 import Tecnologias from "../../Components/Tecnologias/Tecnologias";
 import NovaTecnologia from "../../Components/NovaTecnologia/CadastrarNovaTec";
+import { TechContext } from "../../Contexts/TechContext";
 
 export default function Dashboard() {
   const { user, logout } = useContext(AuthContext);
-  console.log(user);
+  const { openModal, modal, techs } = useContext(TechContext);
 
   return (
     <>
@@ -31,13 +32,26 @@ export default function Dashboard() {
           <div className="container">
             <div className="headerContainer">
               <h2>Tecnologias</h2>
-              <button className="addTecBtn">+</button>
+              <button onClick={openModal} className="addTecBtn">
+                +
+              </button>
             </div>
-            <div className="containerTecnologias">
-              <Tecnologias />
-            </div>
+            {techs.length ? (
+              <div className="containerTecnologias">
+                {techs.map((obj) => (
+                  <Tecnologias
+                    title={obj.title}
+                    status={obj.status}
+                    idTech={obj.id}
+                    key={obj.id}
+                  />
+                ))}
+              </div>
+            ) : (
+              ""
+            )}
           </div>
-          <NovaTecnologia />
+          {modal ? <NovaTecnologia /> : null}
         </DashbaordPage>
       ) : (
         <Navigate to={"/"} replace />

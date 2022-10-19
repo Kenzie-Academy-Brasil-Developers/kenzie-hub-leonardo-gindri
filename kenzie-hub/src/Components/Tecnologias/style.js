@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const CardTecnologia = styled.div`
+export const CardTecnologia = styled.li`
   background-color: var(--grey-4);
   display: flex;
   justify-content: space-between;
@@ -19,10 +19,21 @@ export const CardTecnologia = styled.div`
     font-weight: 700;
   }
 
-  span {
-    color: var(--grey-0);
-    font-weight: 400;
-    font-size: 12.18px;
-    line-height: 22.33px;
+  div {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+
+    span {
+      color: var(--grey-0);
+      font-weight: 400;
+      font-size: 12.18px;
+      line-height: 22.33px;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
   }
 `;
