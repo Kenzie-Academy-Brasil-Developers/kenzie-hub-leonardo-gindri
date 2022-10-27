@@ -1,15 +1,17 @@
 import { DashbaordPage } from "./style";
-import { useContext } from "react";
-import { AuthContext } from "../../Contexts/AuthContext";
+import { Key, ReactNode, useContext } from "react";
+import { AuthContext, ITechs } from "../../Contexts/AuthContext";
 import Logo from "../../../Images/Logo.png";
 import { Navigate } from "react-router-dom";
-import Tecnologias from "../../Components/Tecnologias/Tecnologias";
+import Tecnologias, {
+  ITecnologiasProps,
+} from "../../Components/Tecnologias/Tecnologias";
 import NovaTecnologia from "../../Components/NovaTecnologia/CadastrarNovaTec";
 import { TechContext } from "../../Contexts/TechContext";
 
 export default function Dashboard() {
-  const { user, logout } = useContext(AuthContext);
-  const { openModal, modal, techs } = useContext(TechContext);
+  const { user, token, logout } = useContext(AuthContext);
+  const { openModal, modal, techs } = useContext<any>(TechContext);
 
   return (
     <>
@@ -38,14 +40,22 @@ export default function Dashboard() {
             </div>
             {techs.length ? (
               <div className="containerTecnologias">
-                {techs.map((obj) => (
-                  <Tecnologias
-                    title={obj.title}
-                    status={obj.status}
-                    idTech={obj.id}
-                    key={obj.id}
-                  />
-                ))}
+                {techs.map(
+                  (obj: {
+                    title: string;
+                    status: string;
+                    id: string;
+                    data: string;
+                  }) => (
+                    <Tecnologias
+                      title={obj.title}
+                      status={obj.status}
+                      idTech={obj.id}
+                      key={obj.id}
+                      data={obj}
+                    />
+                  )
+                )}
               </div>
             ) : (
               ""

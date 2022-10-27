@@ -9,48 +9,18 @@ import "react-toastify/dist/ReactToastify.min.css";
 import { useContext } from "react";
 import schema from "../../Validations/validationCadastro";
 import { Link } from "react-router-dom";
+import { ICadastro } from "../../Contexts/AuthContext";
 
 export default function Cadastro() {
-  const { onSubmitCadastro } = useContext(AuthContext);
+  const { onSubmitCadastro, loginpage } = useContext(AuthContext);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<ICadastro>({
     resolver: yupResolver(schema),
   });
-
-  const toastSuccess = () =>
-    toast.success("Conta criada com sucesso.", {
-      position: "top-center",
-      autoClose: 1000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: false,
-      draggable: true,
-      progress: undefined,
-    });
-
-  const navigate = useNavigate();
-
-  function loginpage(event) {
-    event.preventDefault();
-    console.log("22");
-    navigate("/");
-  }
-
-  function onSubmitFunction(data) {
-    Api.post("/users", data)
-      .then(
-        (response) => console.log(response.data),
-        toastSuccess(),
-        setTimeout(() => {
-          navigate("/");
-        }, 2000)
-      )
-      .catch((err) => console.log(err));
-  }
 
   return (
     <ContainerRegister>
@@ -107,7 +77,7 @@ export default function Cadastro() {
           />
           <span className="spanErro"> {errors.contact?.message} </span>
           <p>Selecionar Módulo</p>
-          <select name="" {...register("course_module")} id="">
+          <select {...register("course_module")} id="">
             <option value="Primeiro módulo (Introdução ao Frontend)">
               Primeiro módulo (Introdução ao Frontend)
             </option>

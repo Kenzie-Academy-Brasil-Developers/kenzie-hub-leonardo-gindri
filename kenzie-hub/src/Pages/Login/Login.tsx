@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Link } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.min.css";
+import { ILogin } from "../../Contexts/AuthContext";
 
 const schema = yup.object({
   email: yup
@@ -20,13 +21,13 @@ const schema = yup.object({
 });
 
 export default function LoginPage() {
-  const { onSubmitFunction, user } = useContext(AuthContext);
+  const { onSubmitFunction } = useContext(AuthContext);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<ILogin>({
     resolver: yupResolver(schema),
   });
 

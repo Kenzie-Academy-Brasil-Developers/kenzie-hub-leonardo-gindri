@@ -1,6 +1,6 @@
 import { toast } from "react-toastify";
 
-const useToast = (type, text) => {
+const useToast = (type: string, text: string) => {
   switch (type) {
     case "success":
       toast.success(text, {

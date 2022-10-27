@@ -3,7 +3,19 @@ import lixeira from "../../../Images/Vector.png";
 import { useContext } from "react";
 import { TechContext } from "../../Contexts/TechContext";
 
-export default function Tecnologias({ title, status, idTech }) {
+export interface ITecnologiasProps {
+  title: string;
+  status: string;
+  idTech: string;
+  data: object;
+}
+
+export default function Tecnologias({
+  title,
+  status,
+  idTech,
+  data,
+}: ITecnologiasProps) {
   const { DeletarTech } = useContext(TechContext);
   return (
     <CardTecnologia>

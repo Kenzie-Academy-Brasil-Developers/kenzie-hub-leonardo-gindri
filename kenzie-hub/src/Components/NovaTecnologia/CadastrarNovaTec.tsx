@@ -3,6 +3,11 @@ import { TechContext } from "../../Contexts/TechContext";
 import { useContext } from "react";
 import { useForm } from "react-hook-form";
 
+interface IForm {
+  title: string;
+  status: string;
+}
+
 export default function NovaTecnologia() {
   const { closeModal, CadastrarTech } = useContext(TechContext);
 
@@ -10,7 +15,7 @@ export default function NovaTecnologia() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({});
+  } = useForm<IForm>({});
 
   return (
     <StyledNovaTec>
